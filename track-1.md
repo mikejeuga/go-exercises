@@ -7,11 +7,15 @@ If you make any assumptions about the feature (e.g. negative numbers are not sup
 
 ## Part 1
 
-Write a function to add two integers.
+Write a function to add two integers. 
+
+e.g. `add(5, 4)` should return `9`
 
 ## Part 2
 
 Modify the function to add a variable number of integers.
+
+e.g. `add(5, 4, 3, 2, -10)` should return `4`
 
 ## Part 3
 
@@ -75,10 +79,37 @@ Change the program so it discards any duplicate numbers. e.g. `add 2 2 2 3 4 4 4
 
 ## Part 12
 
-Create a new program `math` so when it is invoked as `math --web-server`, it starts a web server with an endpoint `/add?num=4&num=5&num=32` that returns the response `41` as text. 
+Create a new program `math` so when it is invoked as `math --web-server`, it starts a web server with an endpoint `POST /add?num=4&num=5&num=32` that returns the response `41` as text. 
 
+(Ignore why it is a POST method, for now)
 
+## Part 13
 
+Change the math web server so it can also read a form-urlencoded body from the request. 
 
+Example request:
 
+```
+POST /add
+
+num=4&num=5&num=32
+```
+
+will still return `41` as text.
+
+## Part 14
+
+Change the math web server so it can also accept numbers as a JSON array.
+
+Example request:
+
+```
+POST /add
+
+{
+    "nums": [4, 5, 32]
+}
+```
+
+Research the request headers that a client will send that will allow different forms of the request body to be accepted by the server.
 
