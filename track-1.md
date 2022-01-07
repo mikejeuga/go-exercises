@@ -113,3 +113,64 @@ POST /add
 
 Research the request headers that a client will send that will allow different forms of the request body to be accepted by the server.
 
+## Part 15
+
+Add a naive authentication to the endpoint. Only requests containing a header `Authorization: Bearer SUPER_SECRET_API_KEY` (that exact API key) should be allowed in. 
+
+Research and implement the behaviour for when:
+
+1. The header is not present
+2. The API key is incorrect
+
+## Part 16
+
+Instead of a hard-coded API key (should have never committed the API key to source control anyway), read in a list of API keys from an environment variable. Any request with one of those API keys should be allowed; all other requests should be rejected.
+
+## Part 17
+
+Add a new endpoint `GET /fibonacci/:n` which will return the nth number in the Fibonacci sequence (0,1,1,2,3,5,8,13 etc.) where 0 is the 1st number, and 13 is the 8th number.
+
+## Part 18
+
+Extend the API authentication done earlier to also protect the fibonacci endpoint.
+
+## Part 19
+
+For each request that comes in, log out the following info to STDOUT. 
+
+- timestamp
+- HTTP method
+- path and query params (`GET /fibonacci/8`, `POST /add?num=9&num=12`)
+- first 8 chars of the API key
+- request body size
+- response code
+- time taken to send the response
+
+## Part 20
+
+For all endpoints, support a query param `?flakiness=:p`, where 0 <= p <= 1
+
+Based on that probability, return a response code of 500 for that request.  
+
+e.g. if a request comes in as `?flakiness=1`, it's a 100% probability, so send a 500.
+For `?flakiness=0.2`, the probability should be 1 in 5 of returning a 500.
+
+## Part 21
+
+Extend the flakiness param to specify the flaky response code.
+
+e.g. `?flakiness=0.2,404` should return a 404 with a probability of 20%
+
+## Part 22
+
+Extend the flakiness param to simulate a slow server by specifying a delay.
+
+e.g. `?flakiness=0.33,500,3s` will introduce a delay of 3 seconds before sending a 500, all with a probability of 33%
+
+Support `s` and `ms` as units for the delay
+
+## Part 23
+
+Build a program `fiboclient` that calls the fibonacci endpoint (running in a separate process) for the value `10`.
+
+
