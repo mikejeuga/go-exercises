@@ -11,35 +11,37 @@ func Test(t *testing.T) {
 	is := is.New(t)
 	for _, tt := range []struct {
 		name string
-		arg1, arg2 int
+		values []int
 		got int
 		want int
 
 
 	}{
 		{
-			name: "The Add function add 2 values",
-			arg1: 0,
-			arg2: 0,
+			name: "The Add function adds 2 parameters and return the correct value",
+			values: []int{},
 			want: 0,
 		},
 
 		{
-			name: "The Add function add 2 values",
-			arg1: 1,
-			arg2: 1,
+			name: "The Add function adds 1 and 1 and returns 2",
+			values: []int{1, 1},
 			want: 2,
 		},
 
 		{
-			name: "The Add function add 2 values",
-			arg1: 3,
-			arg2: 3,
+			name: "The Add function adds 3 and 3 and returns 6",
+			values: []int{3, 3},
 			want: 6,
+		},
+		{
+			name: "The Add function adds more than 3 parameters and return the correct value",
+			values: []int{3, 3,3},
+			want: 9,
 		},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.got = add.Add(tt.arg1, tt.arg2)
+			tt.got = add.Add(tt.values...)
 			is.Equal(tt.got, tt.want)
 		})
 	}

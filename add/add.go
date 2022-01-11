@@ -1,6 +1,10 @@
 package add
 
 
-func Add(arg1, arg2 int) int {
- return arg1 + arg2
+func Add(numbers ...int) int {
+   total := 0
+   for _, num := range numbers {
+    total += num
+   }
+ return total
 }
