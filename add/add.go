@@ -6,10 +6,9 @@ import (
     "github.com/dustin/go-humanize"
     "io"
     "strconv"
-    "strings"
 )
 
-func Add(numbers ...int) int {
+func Sum(numbers ...int) int {
    total := 0
    for _, num := range numbers {
     total += num
@@ -17,15 +16,18 @@ func Add(numbers ...int) int {
  return total
 }
 
-func PrintAdd(in io.Reader, out io.Writer) {
+func Add(in io.Reader, out io.Writer) {
     var values []int
 
     scanner := bufio.NewScanner(in)
-    scanner.Scan()
-    input := scanner.Text()
+    scanner.Split(bufio.ScanLines)
 
-    split := strings.Split(input, " ")
-    for _, val := range split {
+    var numbers []string
+    for scanner.Scan() {
+        numbers = append(numbers, scanner.Text())
+    }
+
+    for _, val := range numbers {
         num, err := strconv.Atoi(val)
         if err != nil {
             num = 0
@@ -34,7 +36,7 @@ func PrintAdd(in io.Reader, out io.Writer) {
 
     }
 
-    sum := Add(values...)
+    sum := Sum(values...)
     fmt.Fprintf(out, "%s" , humanize.Commaf(float64(sum)))
 
 }

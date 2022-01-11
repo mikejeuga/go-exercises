@@ -6,7 +6,11 @@ import (
 )
 
 func main()  {
-	add.PrintAdd(os.Stdin, os.Stdout)
+	inputTxt, err := os.Open("input.txt")
+	if err != nil {
+		return
+	}
+	add.Add(inputTxt, os.Stdout)
 }
 
 
