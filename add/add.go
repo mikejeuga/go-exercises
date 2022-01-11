@@ -18,13 +18,6 @@ func Sum(numbers ...int) int {
  return total
 }
 
-type Adder struct {
-    in io.Reader
-    out io.Writer
-    filepath string
-}
-
-
 func Add(in []byte, out io.Writer) {
     values := GetData(in)
     toInts := StringsToInts(values)
