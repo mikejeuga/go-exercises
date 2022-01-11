@@ -19,14 +19,14 @@ func Sum(numbers ...int) int {
 }
 
 func Add(in []byte, out io.Writer) {
-    values := GetData(in)
-    toInts := StringsToInts(values)
+    values := getData(in)
+    toInts := stringsToInts(values)
     sum := Sum(toInts...)
     fmt.Fprintf(out, "%s\n", humanize.Commaf(float64(sum)))
 }
 
 
-func StringsToInts(numbers []string) []int {
+func stringsToInts(numbers []string) []int {
     var values []int
     for _, val := range numbers {
         num, err := strconv.Atoi(val)
@@ -38,7 +38,7 @@ func StringsToInts(numbers []string) []int {
     return values
 }
 
-func GetData(in []byte) []string{
+func getData(in []byte) []string{
     if len(dataNewLine(in)) > len(dataCSV(in)) {
         return dataNewLine(in)
     }
