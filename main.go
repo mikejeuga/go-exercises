@@ -6,7 +6,7 @@ import (
 )
 
 func main()  {
-	add.Add(os.Stdin, os.Stdout)
+	add.PrintAdd(os.Stdin, os.Stdout)
 }
 
 

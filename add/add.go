@@ -3,12 +3,13 @@ package add
 import (
     "bufio"
     "fmt"
+    "github.com/dustin/go-humanize"
     "io"
     "strconv"
     "strings"
 )
 
-func Sum(numbers ...int) int {
+func Add(numbers ...int) int {
    total := 0
    for _, num := range numbers {
     total += num
@@ -16,7 +17,7 @@ func Sum(numbers ...int) int {
  return total
 }
 
-func Add(in io.Reader, out io.Writer) {
+func PrintAdd(in io.Reader, out io.Writer) {
     var values []int
 
     scanner := bufio.NewScanner(in)
@@ -33,6 +34,7 @@ func Add(in io.Reader, out io.Writer) {
 
     }
 
-    fmt.Fprintf(out, "%v" ,Sum(values...))
+    sum := Add(values...)
+    fmt.Fprintf(out, "%s" , humanize.Commaf(float64(sum)))
 
 }
