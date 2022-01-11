@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func Test(t *testing.T) {
+func TestAdd(t *testing.T) {
     t.Parallel()
 	is := is.New(t)
 	for _, tt := range []struct {
@@ -48,7 +48,7 @@ func Test(t *testing.T) {
 	}
  }
 
-func TestAdd(t *testing.T) {
+func TestPrintAdd(t *testing.T) {
 	t.Run("Prints the sum of the integer arguments taken", func(t *testing.T) {
 		is := is.New(t)
 		buffer := bytes.Buffer{}
