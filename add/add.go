@@ -1,6 +1,6 @@
 package add
 
 
-func Add() int {
- return 0
+func Add(arg1, arg2 int) int {
+ return arg1 + arg2
 }
