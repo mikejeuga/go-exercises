@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestAdd(t *testing.T) {
+func TestSum(t *testing.T) {
     t.Parallel()
 	is := is.New(t)
 	for _, tt := range []struct {
@@ -48,9 +48,9 @@ func TestAdd(t *testing.T) {
 	}
  }
 
-func TestPrintAdd(t *testing.T) {
-	t.Run("Prints the sum of the integer arguments taken", func(t *testing.T) {
-		is := is.New(t)
+func TestAdd(t *testing.T) {
+	is := is.New(t)
+	t.Run("", func(t *testing.T) {
 		buffer := bytes.Buffer{}
 		ints := []byte(`1
 2
@@ -58,46 +58,38 @@ func TestPrintAdd(t *testing.T) {
 4
 6
 9`)
-		data := bytes.NewReader(ints)
-
-		add.Add(data, &buffer)
-
-		want := "25"
-
+		add.Add(ints, &buffer)
+		want := `25
+`
 		is.Equal(buffer.String(), want)
-
-
 
 	})
 
 	//TODO: table test the below.
 
-	t.Run("Prints the sum of the integer arguments taken", func(t *testing.T) {
-		is := is.New(t)
+	t.Run("Prints the sum of integers and print thousands with commas", func(t *testing.T) {
 		buffer := bytes.Buffer{}
 		ints := []byte(`10000
 10000`)
-		data := bytes.NewReader(ints)
-
-		add.Add(data, &buffer)
-
-		want := "20,000"
-
+		add.Add(ints, &buffer)
+		want := `20,000
+`
 		is.Equal(buffer.String(), want)
 
 	})
 
-	t.Run("Prints the sum of the integer arguments taken", func(t *testing.T) {
-		is := is.New(t)
+	t.Run("Prints the sum of integers and print millions with commas", func(t *testing.T) {
 		buffer := bytes.Buffer{}
 		ints := []byte(`1000000
 1000000`)
-		data := bytes.NewReader(ints)
 
-		add.Add(data, &buffer)
-
-		want := "2,000,000"
-
+		add.Add(ints, &buffer)
+		want := `2,000,000
+`
 		is.Equal(buffer.String(), want)
 	})
+
 }
+
+
+

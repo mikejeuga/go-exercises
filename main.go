@@ -6,9 +6,9 @@ import (
 )
 
 func main()  {
-	inputTxt, err := os.Open("input.txt")
+	inputTxt, err := os.ReadFile(os.Args[1])
 	if err != nil {
-		return
+		panic(err)
 	}
 	add.Add(inputTxt, os.Stdout)
 }
