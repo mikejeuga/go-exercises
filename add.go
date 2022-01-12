@@ -26,8 +26,8 @@ func main()  {
 
     //if a file name is given
     inputTxt, _ := os.ReadFile(os.Args[1])
-    fileName := len(inputTxt) > 1
-    if fileName && len(os.Args) < 3 {
+    fileNameOnly := len(inputTxt) > 1 && len(os.Args) < 3
+    if fileNameOnly {
         Add(bytes.NewReader(inputTxt), os.Stdout)
         return
     }
