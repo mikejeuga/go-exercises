@@ -1,9 +1,8 @@
-package add_test
+package main
 
 import (
 	"bytes"
 	"github.com/matryer/is"
-	"github.com/mikejeuga/go-exercises/add"
 	"testing"
 )
 
@@ -42,7 +41,7 @@ func TestSum(t *testing.T) {
 		},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.got = add.Sum(tt.values...)
+			tt.got = Sum(tt.values...)
 			is.Equal(tt.got, tt.want)
 		})
 	}
@@ -58,7 +57,10 @@ func TestAdd(t *testing.T) {
 4
 6
 9`)
-		add.Add(ints, &buffer)
+		data := bytes.NewReader(ints)
+
+
+		Add(data, &buffer)
 		want := `25
 `
 		is.Equal(buffer.String(), want)
@@ -71,7 +73,9 @@ func TestAdd(t *testing.T) {
 		buffer := bytes.Buffer{}
 		ints := []byte(`10000
 10000`)
-		add.Add(ints, &buffer)
+
+		data := bytes.NewReader(ints)
+		Add(data, &buffer)
 		want := `20,000
 `
 		is.Equal(buffer.String(), want)
@@ -83,12 +87,45 @@ func TestAdd(t *testing.T) {
 		ints := []byte(`1000000
 1000000`)
 
-		add.Add(ints, &buffer)
+		data := bytes.NewReader(ints)
+
+		Add(data, &buffer)
 		want := `2,000,000
 `
 		is.Equal(buffer.String(), want)
 	})
 
+	t.Run("Prints the sum of the integer arguments taken", func(t *testing.T) {
+		buffer := bytes.Buffer{}
+		ints := []byte("1 2 3 4 6 9")
+
+
+		data := bytes.NewReader(ints)
+		Add(data, &buffer)
+
+		want := `25
+`
+		is.Equal(buffer.String(), want)
+
+
+
+	})
+
+	t.Run("Prints the sum of the integer arguments taken", func(t *testing.T) {
+		buffer := bytes.Buffer{}
+		ints := []byte("1,2,3,4,6,9")
+
+
+		data := bytes.NewReader(ints)
+		Add(data, &buffer)
+
+		want := `25
+`
+		is.Equal(buffer.String(), want)
+
+
+
+	})
 }
 
 
