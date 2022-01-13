@@ -5,6 +5,7 @@ import (
     "bytes"
     "fmt"
     "github.com/dustin/go-humanize"
+    "github.com/spf13/pflag"
     "io"
     "os"
     "strconv"
@@ -13,31 +14,30 @@ import (
 
 
 func main()  {
-
-    defaultBytes, _ := os.ReadFile("input.csv")
-    defaultReader := bytes.NewReader(defaultBytes)
-
-    //if there is no arguments given
-    noArgs := len(os.Args) < 2
-    if noArgs {
-        Add(defaultReader, os.Stdout)
+    var intCheck []int
+    for _, val := range os.Args[1:] {
+        num, _ := strconv.Atoi(val)
+        intCheck = append(intCheck, num)
+    }
+    if len(os.Args[1:]) > 1 && Sum(intCheck...) > 0 {
+        fmt.Fprintf(os.Stdout, "%s\n", humanize.Commaf(float64(Sum(intCheck...))))
         return
     }
 
-    //if a file name is given
-    inputTxt, _ := os.ReadFile(os.Args[1])
-    fileNameOnly := len(inputTxt) > 1 && len(os.Args) < 3
-    if fileNameOnly {
-        Add(bytes.NewReader(inputTxt), os.Stdout)
-        return
+
+
+    values:= []string{"input.csv"}
+    stringP := pflag.StringSliceP("input-file", "i", values,"Enter the name of the files to be processed")
+    pflag.Parse()
+
+
+        for _, file := range *stringP {
+            readFile, _ := os.ReadFile(file)
+            defaultFile := bytes.NewReader(readFile)
+            Add(defaultFile, os.Stdout)
+        }
     }
 
-    //if numbers are given to the command-line
-    ints := StringsToInts(os.Args[1:])
-    Sum(ints...)
-    fmt.Fprintf(os.Stdout, "%s\n", humanize.Commaf(float64(Sum(ints...))))
-
-}
 
 
 func Sum(numbers ...int) int {
@@ -74,7 +74,6 @@ func StringsToInts(numbers []string) []int {
 }
 
 
-
 func getData(in []byte) []string{
     if len(dataSpaceDelimited(in)) > 2 {
         return dataSpaceDelimited(in)
@@ -85,6 +84,7 @@ func getData(in []byte) []string{
     }
     return dataCSV(in)
 }
+
 
 func dataNewLine(in []byte) []string {
     reader := bytes.NewReader(in)
@@ -98,7 +98,6 @@ func dataNewLine(in []byte) []string {
     return numbers
 }
 
-
 func dataSpaceDelimited(in []byte) []string{
     reader := bytes.NewReader(in)
     scanner := bufio.NewScanner(reader)
@@ -108,6 +107,7 @@ func dataSpaceDelimited(in []byte) []string{
     split := strings.Split(input, " ")
     return split
 }
+
 
 func dataCSV(in []byte) []string{
     reader := bytes.NewReader(in)
