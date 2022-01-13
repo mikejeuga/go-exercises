@@ -19,7 +19,7 @@ func main()  {
         num, _ := strconv.Atoi(val)
         intCheck = append(intCheck, num)
     }
-    if len(os.Args[1:]) > 1 && Sum(intCheck...) > 0 {
+    if len(os.Args[1:]) > 0 && Sum(intCheck...) > 0 {
         fmt.Fprintf(os.Stdout, "%s\n", humanize.Commaf(float64(Sum(intCheck...))))
         return
     }
