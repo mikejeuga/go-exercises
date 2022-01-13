@@ -27,7 +27,7 @@ func main()  {
 
 
     values:= []string{"input.csv"}
-    stringP := pflag.StringSliceP("input-file", "i", values,"Enter the name of the files to be processed")
+    stringP := pflag.StringSliceP("input-file", "f", values,"Enter the name of the files to be processed")
     pflag.Parse()
 
 
