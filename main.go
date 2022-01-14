@@ -7,9 +7,6 @@ import (
 func main()  {
 	cmd := cli.NewCommand()
 
-	if cmd.AddManualEntries() {
-		return
-	}
-
+	if cmd.AddManualEntries() {return}
 	cmd.AddWithFileInputs()
 }
