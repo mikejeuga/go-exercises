@@ -6,7 +6,9 @@ import (
 	"fmt"
 	"github.com/dustin/go-humanize"
 	add "github.com/mikejeuga/go-exercises/src/domain"
+	"github.com/spf13/pflag"
 	"io"
+	"os"
 	"strconv"
 	"strings"
 )
@@ -31,6 +33,32 @@ func (c Command) Add(r io.Reader, w io.Writer) {
 	sum := c.Calc.Add(toInts...)
 	fmt.Fprintf(w, "%s\n", humanize.Commaf(float64(sum)))
 }
+
+func (c *Command)AddWithFileInputs() {
+	values := []string{"input.csv"}
+	stringP := pflag.StringSliceP("input-file", "f", values, "Enter the name of the files to be processed")
+	pflag.Parse()
+
+	for _, file := range *stringP {
+		readFile, _ := os.ReadFile("data/" + file)
+		defaultFile := bytes.NewReader(readFile)
+		c.Add(defaultFile, os.Stdout)
+	}
+}
+
+func (c *Command) AddManualEntries() bool {
+	var intCheck []int
+	for _, val := range os.Args[1:] {
+		num, _ := strconv.Atoi(val)
+		intCheck = append(intCheck, num)
+	}
+	if len(os.Args[1:]) > 0 && c.Calc.Add(intCheck...) > 0 {
+		fmt.Fprintf(os.Stdout, "%s\n", humanize.Commaf(float64(c.Calc.Add(intCheck...))))
+		return true
+	}
+	return false
+}
+
 
 func stringsToInts(numbers []string) []int {
 	var values []int
