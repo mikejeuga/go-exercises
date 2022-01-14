@@ -18,8 +18,8 @@ func main()  {
 	num, _ := strconv.Atoi(val)
 	intCheck = append(intCheck, num)
 }
-	if len(os.Args[1:]) > 0 && cmd.Service.Add(intCheck...) > 0 {
-		fmt.Fprintf(os.Stdout, "%s\n", humanize.Commaf(float64(cmd.Service.Add(intCheck...))))
+	if len(os.Args[1:]) > 0 && cmd.Calc.Add(intCheck...) > 0 {
+		fmt.Fprintf(os.Stdout, "%s\n", humanize.Commaf(float64(cmd.Calc.Add(intCheck...))))
 		return
 	}
 

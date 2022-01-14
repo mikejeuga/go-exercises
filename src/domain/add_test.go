@@ -41,7 +41,7 @@ func TestSum(t *testing.T) {
 		},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
-			service := add.Service{}
+			service := add.AddProvider{}
 			tt.got = service.Add(tt.values...)
 			is.Equal(tt.got, tt.want)
 		})

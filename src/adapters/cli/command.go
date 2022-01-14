@@ -12,11 +12,12 @@ import (
 )
 
 type Command struct {
-	Service add.Service
+	Calc add.Adder
 }
 
+
 func NewCommand() *Command {
-	return &Command{Service: *add.NewService()}
+	return &Command{add.NewAddProvider()}
 }
 
 func (c Command) Add(r io.Reader, w io.Writer) {
@@ -27,7 +28,7 @@ func (c Command) Add(r io.Reader, w io.Writer) {
 
 	values := getData(readAll)
 	toInts := stringsToInts(values)
-	sum := c.Service.Add(toInts...)
+	sum := c.Calc.Add(toInts...)
 	fmt.Fprintf(w, "%s\n", humanize.Commaf(float64(sum)))
 }
 

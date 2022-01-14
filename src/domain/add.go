@@ -1,20 +1,17 @@
 package domain
 
-import (
-    "io"
-)
-
 type Adder interface {
-    Add(r io.Reader, w io.Writer)
+   Add(numbers ...int) int
 }
 
-type Service struct {}
+type AddProvider struct {}
 
-func NewService() *Service {
-    return &Service{}
+func NewAddProvider() *AddProvider {
+    return &AddProvider{}
 }
 
-func (s Service) Add(numbers...int) int {
+
+func (a AddProvider) Add(numbers...int) int {
     total := 0
     for _, num := range numbers {
         total += num
