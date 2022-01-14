@@ -30,17 +30,20 @@ func (c Command) Add(r io.Reader, w io.Writer) {
 
 	values := getData(readAll)
 	toInts := stringsToInts(values)
+	for _, num := range toInts {
+		fmt.Fprintf(w, "%v\n", num)
+	}
 	sum := c.Calc.Add(toInts...)
-	fmt.Fprintf(w, "%s\n", humanize.Commaf(float64(sum)))
+	fmt.Fprintf(w, "Total: %s\n", humanize.Commaf(float64(sum)))
 }
 
 func (c *Command)AddWithFileInputs() {
-	values := []string{"input.csv"}
+	values := []string{"data/input.csv"}
 	stringP := pflag.StringSliceP("input-file", "f", values, "Enter the name of the files to be processed")
 	pflag.Parse()
 
 	for _, file := range *stringP {
-		readFile, _ := os.ReadFile("data/" + file)
+		readFile, _ := os.ReadFile(file)
 		defaultFile := bytes.NewReader(readFile)
 		c.Add(defaultFile, os.Stdout)
 	}
@@ -52,8 +55,12 @@ func (c *Command) AddManualEntries() bool {
 		num, _ := strconv.Atoi(val)
 		intCheck = append(intCheck, num)
 	}
+
 	if len(os.Args[1:]) > 0 && c.Calc.Add(intCheck...) > 0 {
-		fmt.Fprintf(os.Stdout, "%s\n", humanize.Commaf(float64(c.Calc.Add(intCheck...))))
+		for _, val := range intCheck {
+			fmt.Println(val)
+		}
+		fmt.Fprintf(os.Stdout, "Total: %s\n", humanize.Commaf(float64(c.Calc.Add(intCheck...))))
 		return true
 	}
 	return false
