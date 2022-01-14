@@ -22,7 +22,13 @@ func TestAdd(t *testing.T) {
 
 
 		command.Add(data, &buffer)
-		want := `25
+		want := `1
+2
+3
+4
+6
+9
+Total: 25
 `
 		is.Equal(buffer.String(), want)
 
@@ -38,7 +44,9 @@ func TestAdd(t *testing.T) {
 
 		data := bytes.NewReader(ints)
 		command.Add(data, &buffer)
-		want := `20,000
+		want := `10000
+10000
+Total: 20,000
 `
 		is.Equal(buffer.String(), want)
 
@@ -53,7 +61,9 @@ func TestAdd(t *testing.T) {
 		data := bytes.NewReader(ints)
 
 		 command.Add(data, &buffer)
-		want := `2,000,000
+		want := `1000000
+1000000
+Total: 2,000,000
 `
 		is.Equal(buffer.String(), want)
 	})
@@ -67,7 +77,13 @@ func TestAdd(t *testing.T) {
 		data := bytes.NewReader(ints)
 		command.Add(data, &buffer)
 
-		want := `25
+		want := `1
+2
+3
+4
+6
+9
+Total: 25
 `
 		is.Equal(buffer.String(), want)
 
@@ -84,12 +100,15 @@ func TestAdd(t *testing.T) {
 		data := bytes.NewReader(ints)
 		command.Add(data, &buffer)
 
-		want := `25
+		want := `1
+2
+3
+4
+6
+9
+Total: 25
 `
 		is.Equal(buffer.String(), want)
-
-
-
 	})
 }
 
