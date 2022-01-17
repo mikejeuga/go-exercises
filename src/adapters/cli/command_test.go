@@ -40,13 +40,13 @@ Total: 25
 		command := cli.NewCommand()
 		buffer := bytes.Buffer{}
 		ints := []byte(`10000
-10000`)
+20000`)
 
 		data := bytes.NewReader(ints)
 		command.Add(data, &buffer)
 		want := `10000
-10000
-Total: 20,000
+20000
+Total: 30,000
 `
 		is.Equal(buffer.String(), want)
 
@@ -55,15 +55,15 @@ Total: 20,000
 	t.Run("Prints the sum of integers and print millions with commas", func(t *testing.T) {
 		command := cli.NewCommand()
 		buffer := bytes.Buffer{}
-		ints := []byte(`1000000
+		ints := []byte(`2000000
 1000000`)
 
 		data := bytes.NewReader(ints)
 
 		 command.Add(data, &buffer)
-		want := `1000000
+		want := `2000000
 1000000
-Total: 2,000,000
+Total: 3,000,000
 `
 		is.Equal(buffer.String(), want)
 	})
@@ -71,7 +71,7 @@ Total: 2,000,000
 	t.Run("Prints the sum of the integer arguments taken", func(t *testing.T) {
 		command := cli.NewCommand()
 		buffer := bytes.Buffer{}
-		ints := []byte("1 2 3 4 6 9")
+		ints := []byte("1 2 3 4 6 9 9")
 
 
 		data := bytes.NewReader(ints)
@@ -82,6 +82,7 @@ Total: 2,000,000
 3
 4
 6
+9
 9
 Total: 25
 `

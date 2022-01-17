@@ -14,12 +14,22 @@ import (
 )
 
 type Command struct {
-	Calc add.Adder
+	Calc Adder
+}
+
+type Adder interface {
+	Add(numbers ...int) int
+}
+
+type AdderFunc func(num...int) int
+
+func (f AdderFunc) Add(numbers ...int) int {
+	return f(numbers...)
 }
 
 
 func NewCommand() *Command {
-	return &Command{add.NewAddProvider()}
+	return &Command{AdderFunc(add.Add)}
 }
 
 func (c Command) Add(r io.Reader, w io.Writer) {
