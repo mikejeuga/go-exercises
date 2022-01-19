@@ -2,6 +2,7 @@ package cli_test
 
 import (
 	"bytes"
+	"context"
 	"github.com/matryer/is"
 	"github.com/mikejeuga/go-exercises/src/adapters/cli"
 	"testing"
@@ -9,6 +10,7 @@ import (
 
 func TestAdd(t *testing.T) {
 	is := is.New(t)
+	ctx := context.Background()
 	t.Run("", func(t *testing.T) {
 		command := cli.NewCommand()
 		buffer := bytes.Buffer{}
@@ -19,9 +21,8 @@ func TestAdd(t *testing.T) {
 6
 9`)
 		data := bytes.NewReader(ints)
+		command.Add(ctx, &buffer, data)
 
-
-		command.Add(data, &buffer)
 		want := `1
 2
 3
@@ -43,7 +44,7 @@ Total: 25
 20000`)
 
 		data := bytes.NewReader(ints)
-		command.Add(data, &buffer)
+		command.Add(ctx, &buffer, data)
 		want := `10000
 20000
 Total: 30,000
@@ -60,7 +61,7 @@ Total: 30,000
 
 		data := bytes.NewReader(ints)
 
-		 command.Add(data, &buffer)
+		 command.Add(ctx, &buffer, data)
 		want := `2000000
 1000000
 Total: 3,000,000
@@ -75,7 +76,7 @@ Total: 3,000,000
 
 
 		data := bytes.NewReader(ints)
-		command.Add(data, &buffer)
+		command.Add(ctx, &buffer, data)
 
 		want := `1
 2
@@ -99,7 +100,7 @@ Total: 25
 
 
 		data := bytes.NewReader(ints)
-		command.Add(data, &buffer)
+		command.Add(ctx, &buffer, data)
 
 		want := `1
 2

@@ -3,6 +3,7 @@ package cli
 import (
 	"bufio"
 	"bytes"
+	"context"
 	"fmt"
 	"github.com/dustin/go-humanize"
 	add "github.com/mikejeuga/go-exercises/src/domain"
@@ -18,12 +19,12 @@ type Command struct {
 }
 
 type Adder interface {
-	Add(numbers ...int) int
+	Add(ctx context.Context, numbers ...int) int
 }
 
 type AdderFunc func(num...int) int
 
-func (f AdderFunc) Add(numbers ...int) int {
+func (f AdderFunc) Add(ctx context.Context, numbers ...int) int {
 	return f(numbers...)
 }
 
@@ -32,7 +33,7 @@ func NewCommand() *Command {
 	return &Command{AdderFunc(add.Add)}
 }
 
-func (c Command) Add(r io.Reader, w io.Writer) {
+func (c Command) Add(ctx context.Context, w io.Writer, r io.Reader) {
 	readAll, err := io.ReadAll(r)
 	if err != nil {
 		panic("it doesn't read io.ReadAll")
@@ -43,11 +44,11 @@ func (c Command) Add(r io.Reader, w io.Writer) {
 	for _, num := range toInts {
 		fmt.Fprintf(w, "%v\n", num)
 	}
-	sum := c.Calc.Add(toInts...)
+	sum := c.Calc.Add(ctx, toInts...)
 	fmt.Fprintf(w, "Total: %s\n", humanize.Commaf(float64(sum)))
 }
 
-func (c *Command)AddWithFileInputs() {
+func (c *Command)AddWithFileInputs(ctx context.Context) {
 	values := []string{"data/input.csv"}
 	stringP := pflag.StringSliceP("input-file", "f", values, "Enter the name of the files to be processed")
 	pflag.Parse()
@@ -55,22 +56,22 @@ func (c *Command)AddWithFileInputs() {
 	for _, file := range *stringP {
 		readFile, _ := os.ReadFile(file)
 		defaultFile := bytes.NewReader(readFile)
-		c.Add(defaultFile, os.Stdout)
+		c.Add(ctx, os.Stdout, defaultFile)
 	}
 }
 
-func (c *Command) AddManualEntries() bool {
+func (c *Command) AddManualEntries(ctx context.Context) bool {
 	var intCheck []int
 	for _, val := range os.Args[1:] {
 		num, _ := strconv.Atoi(val)
 		intCheck = append(intCheck, num)
 	}
 
-	if len(os.Args[1:]) > 0 && c.Calc.Add(intCheck...) > 0 {
+	if len(os.Args[1:]) > 0 && c.Calc.Add(ctx, intCheck...) > 0 {
 		for _, val := range intCheck {
 			fmt.Println(val)
 		}
-		fmt.Fprintf(os.Stdout, "Total: %s\n", humanize.Commaf(float64(c.Calc.Add(intCheck...))))
+		fmt.Fprintf(os.Stdout, "Total: %s\n", humanize.Commaf(float64(c.Calc.Add(ctx, intCheck...))))
 		return true
 	}
 	return false
