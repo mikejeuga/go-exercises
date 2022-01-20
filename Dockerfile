@@ -14,4 +14,4 @@ RUN go build -o main ./cmd/add/*.go
 
 EXPOSE 8080
 
-CMD["./main"]
+CMD["./add"]
