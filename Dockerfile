@@ -12,6 +12,7 @@ copy ./ ./
 RUN go test -v ./...
 RUN go build -o main ./cmd/add/*.go
 
+
 EXPOSE 8080
 
-CMD["./add"]
+CMD["./cmd/add/main.go"]
