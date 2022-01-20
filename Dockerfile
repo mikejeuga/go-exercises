@@ -10,7 +10,7 @@ COPY go.mod go.sum ./
 copy ./ ./
 
 RUN go test -v ./...
-RUN go build -o main ./cmd/add/*.go
+RUN go build -o main ./cmd/add/main.go
 
 
 EXPOSE 8080
