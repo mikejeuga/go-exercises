@@ -13,6 +13,6 @@ RUN go test -v ./...
 RUN go build -o main ./cmd/add/main.go
 
 
-EXPOSE 8080
+EXPOSE 8099
 
 CMD ["./main"]
