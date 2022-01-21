@@ -34,7 +34,7 @@ func (c Command) Add(ctx context.Context, w io.Writer, r io.Reader) {
 	for _, num := range toInts {
 		fmt.Fprintf(w, "%v\n", num)
 	}
-	sum := c.Calc.Add(ctx, toInts...)
+	sum := c.Calc.Add(toInts...)
 	fmt.Fprintf(w, "Total: %s\n", humanize.Commaf(float64(sum)))
 }
 
@@ -57,11 +57,11 @@ func (c *Command) AddManualEntries(ctx context.Context) bool {
 		intCheck = append(intCheck, num)
 	}
 
-	if len(os.Args[1:]) > 0 && c.Calc.Add(ctx, intCheck...) > 0 {
+	if len(os.Args[1:]) > 0 && c.Calc.Add(intCheck...) > 0 {
 		for _, val := range intCheck {
 			fmt.Println(val)
 		}
-		fmt.Fprintf(os.Stdout, "Total: %s\n", humanize.Commaf(float64(c.Calc.Add(ctx, intCheck...))))
+		fmt.Fprintf(os.Stdout, "Total: %s\n", humanize.Commaf(float64(c.Calc.Add(intCheck...))))
 		return true
 	}
 	return false

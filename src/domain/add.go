@@ -1,21 +1,23 @@
 package domain
 
-import "context"
-
-type Adder interface {
-    Add(ctx context.Context, numbers ...int) int
-}
-
-type AdderFunc func(num...int) int
-
-func (f AdderFunc) Add(ctx context.Context, numbers ...int) int {
-    return f(numbers...)
-}
-
+import (
+    "strconv"
+)
 
 var(
     Default = AdderFunc(Add)
 )
+
+type Adder interface {
+    Add(numbers ...int) int
+}
+
+type AdderFunc func(num...int) int
+
+func (f AdderFunc) Add(numbers ...int) int {
+    return f(numbers...)
+}
+
 
 func Add(numbers...int) int {
     total := 0
@@ -36,4 +38,16 @@ func Uniq(in []int) []int {
         }
     }
     return uniqInts
+}
+
+func stringsToInts(numbers []string) []int {
+    var values []int
+    for _, val := range numbers {
+        num, err := strconv.Atoi(val)
+        if err != nil {
+            continue
+        }
+        values = append(values, num)
+    }
+    return values
 }
