@@ -9,15 +9,19 @@ import (
 )
 
 type Server struct {
-
+	math Adder
 }
 
-func (s Server) Add(w http.ResponseWriter, r *http.Request) {
+func NewServer(math Adder) *http.Server {
+	router := mux.NewRouter()
+	s := Server{math: math}
+	router.HandleFunc("/", s.home).Methods(http.MethodGet)
+	router.HandleFunc("/math", s.add).Methods(http.MethodPost)
 
-}
-
-func NewServer() *Server {
-	return &Server{}
+	return &http.Server{
+		Addr:    ":8099",
+		Handler: router,
+	}
 }
 
 type Adder interface {
@@ -26,34 +30,23 @@ type Adder interface {
 
 type AdderFunc func(num...int) int
 
+
 func (f AdderFunc) Add(ctx context.Context, numbers ...int) int {
 	return f(numbers...)
 }
 
 
 
-func (s Server) Run() error {
-	router := mux.NewRouter()
-	router.HandleFunc("/", s.Home).Methods(http.MethodGet)
-
-	server := http.Server{
-		Addr:    ":8080",
-		Handler: router,
-	}
-
-	fmt.Println("THE MATH SERVER IS RUNNING!!!")
-
-	return server.ListenAndServe()
-
-}
-
-
-func (s Server) Home(w http.ResponseWriter, r *http.Request) {
+func (s Server) home(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, "The math server is healthy")
 }
 
 
-
+func (s Server) add(w http.ResponseWriter, r *http.Request) {
+	strings := r.URL.Query()["num"]
+	total := s.math.Add(r.Context(), stringsToInts(strings)...)
+	fmt.Fprintf(w, "Total: %d", total)
+}
 
 func stringsToInts(numbers []string) []int {
 	var values []int
