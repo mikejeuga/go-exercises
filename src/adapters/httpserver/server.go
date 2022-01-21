@@ -1,18 +1,18 @@
 package httpserver
 
 import (
-	"context"
 	"fmt"
 	"github.com/gorilla/mux"
+	add "github.com/mikejeuga/go-exercises/src/domain"
 	"net/http"
 	"strconv"
 )
 
 type Server struct {
-	math Adder
+	math add.Adder
 }
 
-func NewServer(math Adder) *http.Server {
+func NewServer(math add.Adder) *http.Server {
 	router := mux.NewRouter()
 	s := Server{math: math}
 	router.HandleFunc("/", s.home).Methods(http.MethodGet)
@@ -24,16 +24,8 @@ func NewServer(math Adder) *http.Server {
 	}
 }
 
-type Adder interface {
-	Add(ctx context.Context, numbers ...int) int
-}
-
-type AdderFunc func(num...int) int
 
 
-func (f AdderFunc) Add(ctx context.Context, numbers ...int) int {
-	return f(numbers...)
-}
 
 
 

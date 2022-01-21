@@ -2,7 +2,6 @@ package httpserver_test
 
 import (
 	"github.com/matryer/is"
-	"github.com/mikejeuga/go-exercises/src/adapters/cli"
 	"github.com/mikejeuga/go-exercises/src/adapters/httpserver"
 	add "github.com/mikejeuga/go-exercises/src/domain"
 	"net/http"
@@ -12,7 +11,7 @@ import (
 
 func TestServer(t *testing.T) {
     t.Parallel()
-	srv := httpserver.NewServer(cli.AdderFunc(add.Add))
+	srv := httpserver.NewServer(add.Default)
 	for _, tt := range []struct {
 		name, expected string
 		res *httptest.ResponseRecorder
@@ -39,7 +38,7 @@ func TestServer(t *testing.T) {
 
 func TestAdd_Handler(t *testing.T) {
     t.Parallel()
-	srv := httpserver.NewServer(cli.AdderFunc(add.Add))
+	srv := httpserver.NewServer(add.Default)
 	for _, tt := range []struct {
 		name, expected string
 		res *httptest.ResponseRecorder

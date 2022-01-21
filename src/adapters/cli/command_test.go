@@ -5,6 +5,7 @@ import (
 	"context"
 	"github.com/matryer/is"
 	"github.com/mikejeuga/go-exercises/src/adapters/cli"
+	add "github.com/mikejeuga/go-exercises/src/domain"
 	"testing"
 )
 
@@ -12,7 +13,7 @@ func TestAdd(t *testing.T) {
 	is := is.New(t)
 	ctx := context.Background()
 	t.Run("", func(t *testing.T) {
-		command := cli.NewCommand()
+		command := cli.NewCommand(add.Default)
 		buffer := bytes.Buffer{}
 		ints := []byte(`1
 2
@@ -38,7 +39,7 @@ Total: 25
 	//TODO: table test the below.
 
 	t.Run("Prints the sum of integers and print thousands with commas", func(t *testing.T) {
-		command := cli.NewCommand()
+		command := cli.NewCommand(add.Default)
 		buffer := bytes.Buffer{}
 		ints := []byte(`10000
 20000`)
@@ -54,7 +55,7 @@ Total: 30,000
 	})
 
 	t.Run("Prints the sum of integers and print millions with commas", func(t *testing.T) {
-		command := cli.NewCommand()
+		command := cli.NewCommand(add.Default)
 		buffer := bytes.Buffer{}
 		ints := []byte(`2000000
 1000000`)
@@ -70,7 +71,7 @@ Total: 3,000,000
 	})
 
 	t.Run("Prints the sum of the integer arguments taken", func(t *testing.T) {
-		command := cli.NewCommand()
+		command := cli.NewCommand(add.Default)
 		buffer := bytes.Buffer{}
 		ints := []byte("1 2 3 4 6 9 9")
 
@@ -94,7 +95,7 @@ Total: 25
 	})
 
 	t.Run("Prints the sum of the integer arguments taken", func(t *testing.T) {
-		command := cli.NewCommand()
+		command := cli.NewCommand(add.Default)
 		buffer := bytes.Buffer{}
 		ints := []byte("1,2,3,4,6,9")
 

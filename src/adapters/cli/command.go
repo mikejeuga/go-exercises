@@ -15,23 +15,13 @@ import (
 )
 
 type Command struct {
-	Calc Adder
+	Calc add.Adder
 }
 
-type Adder interface {
-	Add(ctx context.Context, numbers ...int) int
+func NewCommand(calc add.Adder) *Command {
+	return &Command{Calc: calc}
 }
 
-type AdderFunc func(num...int) int
-
-func (f AdderFunc) Add(ctx context.Context, numbers ...int) int {
-	return f(numbers...)
-}
-
-
-func NewCommand() *Command {
-	return &Command{AdderFunc(add.Add)}
-}
 
 func (c Command) Add(ctx context.Context, w io.Writer, r io.Reader) {
 	readAll, err := io.ReadAll(r)
