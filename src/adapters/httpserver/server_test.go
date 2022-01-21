@@ -45,17 +45,17 @@ func TestAdd_Handler(t *testing.T) {
 		req *http.Request
 	}{
 		{
-			name: "The math handler shows the addition of the numbers in the query",
+			name: "The math handler shows the addition of no numbers in the query",
 			res: httptest.NewRecorder(),
 			req: httptest.NewRequest(http.MethodPost, "/math", nil),
 			expected: "Total: 0",
 		},{
-			name: "The math handler shows the addition of the numbers in the query",
+			name: "The math handler shows the addition of the 2 numbers in the query",
 			res: httptest.NewRecorder(),
 			req: httptest.NewRequest(http.MethodPost, "/math?num=4&num=5", nil),
 			expected: "Total: 9",
 		},{
-			name: "The math handler shows the addition of the numbers in the query",
+			name: "The math handler shows the addition of the 3 numbers in the query",
 			res: httptest.NewRecorder(),
 			req: httptest.NewRequest(http.MethodPost, "/math?num=4&num=5&num=32", nil),
 			expected: "Total: 41",
