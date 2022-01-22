@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"github.com/dustin/go-humanize"
 	add "github.com/mikejeuga/go-exercises/src/domain"
-	"github.com/mikejeuga/go-exercises/util"
+	"github.com/mikejeuga/go-exercises/utils"
 	"github.com/spf13/pflag"
 	"io"
 	"os"
@@ -31,7 +31,7 @@ func (c Command) Add(ctx context.Context, w io.Writer, r io.Reader) {
 	}
 
 	values := getData(readAll)
-	toInts := util.StringsToInts(values)
+	toInts := utils.StringsToInts(values)
 	for _, num := range toInts {
 		fmt.Fprintf(w, "%v\n", num)
 	}

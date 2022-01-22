@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/gorilla/mux"
 	add "github.com/mikejeuga/go-exercises/src/domain"
-	"github.com/mikejeuga/go-exercises/util"
+	"github.com/mikejeuga/go-exercises/utils"
 	"net/http"
 )
 
@@ -35,7 +35,7 @@ type AdderFuncServer func(num...int) int
 
 func (f AdderFuncServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	strings := r.URL.Query()["num"]
-	total := f(util.StringsToInts(strings)...)
+	total := f(utils.StringsToInts(strings)...)
 	fmt.Fprintf(w, "Total: %d", total)
 }
 
