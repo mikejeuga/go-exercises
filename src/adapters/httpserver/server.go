@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/gorilla/mux"
 	add "github.com/mikejeuga/go-exercises/src/domain"
+	"github.com/mikejeuga/go-exercises/util"
 	"net/http"
-	"strconv"
 )
 
 type Server struct {
@@ -13,8 +13,9 @@ type Server struct {
 }
 
 func NewServer(math add.Adder) *http.Server {
-	router := mux.NewRouter()
 	s := Server{math: math}
+
+	router := mux.NewRouter()
 	router.HandleFunc("/", s.home).Methods(http.MethodGet)
 	router.Handle("/math", AdderFuncServer(s.math.Add)).Methods(http.MethodPost)
 
@@ -34,19 +35,7 @@ type AdderFuncServer func(num...int) int
 
 func (f AdderFuncServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	strings := r.URL.Query()["num"]
-	total := f(stringsToInts(strings)...)
+	total := f(util.StringsToInts(strings)...)
 	fmt.Fprintf(w, "Total: %d", total)
 }
 
-
-func stringsToInts(numbers []string) []int {
-	var values []int
-	for _, val := range numbers {
-		num, err := strconv.Atoi(val)
-		if err != nil {
-			continue
-		}
-		values = append(values, num)
-	}
-	return values
-}
