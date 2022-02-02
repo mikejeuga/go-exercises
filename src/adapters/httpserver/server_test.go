@@ -6,6 +6,7 @@ import (
 	add "github.com/mikejeuga/go-exercises/src/domain"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 )
 
@@ -59,6 +60,11 @@ func TestAdd_Handler(t *testing.T) {
 			res: httptest.NewRecorder(),
 			req: httptest.NewRequest(http.MethodPost, "/math?num=4&num=5&num=32", nil),
 			expected: "Total: 41",
+		},{
+			name: "The math handler shows the addition of the numbers within the form",
+			res: httptest.NewRecorder(),
+			req: httptest.NewRequest(http.MethodPost, "/math", strings.NewReader("num=4&num=5")),
+			expected: "Total: 9",
 		},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
