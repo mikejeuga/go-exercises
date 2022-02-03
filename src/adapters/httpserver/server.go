@@ -4,8 +4,10 @@ import (
 	"fmt"
 	"github.com/gorilla/mux"
 	add "github.com/mikejeuga/go-exercises/src/domain"
+	"io"
 	"github.com/mikejeuga/go-exercises/utils"
 	"net/http"
+	"net/url"
 )
 
 type Server struct {
@@ -34,8 +36,21 @@ type AdderFuncServer func(num...int) int
 
 
 func (f AdderFuncServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	strings := r.URL.Query()["num"]
-	total := f(utils.StringsToInts(strings)...)
+	bytes, err := io.ReadAll(r.Body)
+	if err != nil {
+		panic(err)
+	}
+	defer r.Body.Close()
+
+	if len(bytes) == 0 {
+		strings := r.URL.Query()["num"]
+		total := f(utils.StringsToInts(strings)...)
+		fmt.Fprintf(w, "Total: %d", total)
+		return
+	}
+
+	query, err := url.ParseQuery((string(bytes)))
+	total := f(utils.StringsToInts(query["num"])...)
 	fmt.Fprintf(w, "Total: %d", total)
 }
 
