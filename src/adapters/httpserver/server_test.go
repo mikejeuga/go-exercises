@@ -77,7 +77,7 @@ func TestAdd(t *testing.T) {
 	is := is.New(t)
 	srv := httpserver.NewServer(add.Default)
 	m := map[string][]string{}
-	m["num"] = []string{"4", "5", "32"}
+	m["nums"] = []string{"4", "5", "32"}
 	jsonifym, _ := json.Marshal(m)
 
 	req := httptest.NewRequest(http.MethodPost, "/math", bytes.NewReader(jsonifym))

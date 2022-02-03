@@ -44,24 +44,37 @@ func (f AdderFuncServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
-
-if r.Header.Get("Content-Type") == "application/json"{
-	var m map[string][]string
-	err = json.Unmarshal(bytes, &m)
-	total := f(utils.StringsToInts(m["num"])...)
-	fmt.Fprintf(w, "Total: %d", total)
-	return
-}
-
-	if len(bytes) == 0 {
-		strings := r.URL.Query()["num"]
-		total := f(utils.StringsToInts(strings)...)
-		fmt.Fprintf(w, "Total: %d", total)
-		return
+	strings := r.URL.Query()["num"]
+	query, err := url.ParseQuery((string(bytes)))
+	if err != nil {
+		panic(err)
 	}
 
-	query, err := url.ParseQuery((string(bytes)))
-	total := f(utils.StringsToInts(query["num"])...)
+	if r.Header.Get("Content-Type") == "application/json"{
+		f.jsonMath(w, bytes)
+		return
+	} else if r.Header.Get("Content-Type") != "application/x-www-form-urlencoded" {
+		f.formEncodeMath(w, strings)
+		return
+	} else {
+		total := f(utils.StringsToInts(query["num"])...)
+		fmt.Fprintf(w, "Total: %d", total)
+	}
+
+}
+
+func (f AdderFuncServer) formEncodeMath(w http.ResponseWriter, strings []string) {
+	total := f(utils.StringsToInts(strings)...)
+	fmt.Fprintf(w, "Total: %d", total)
+}
+
+func (f AdderFuncServer) jsonMath(w http.ResponseWriter, bytes []byte) {
+	var m map[string][]string
+	err := json.Unmarshal(bytes, &m)
+	if err != nil {
+		panic(err)
+	}
+	total := f(utils.StringsToInts(m["nums"])...)
 	fmt.Fprintf(w, "Total: %d", total)
 }
 
