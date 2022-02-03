@@ -1,6 +1,8 @@
 package httpserver_test
 
 import (
+	"bytes"
+	"encoding/json"
 	"github.com/matryer/is"
 	"github.com/mikejeuga/go-exercises/src/adapters/httpserver"
 	add "github.com/mikejeuga/go-exercises/src/domain"
@@ -41,7 +43,7 @@ func TestAdd_Handler(t *testing.T) {
     t.Parallel()
 	srv := httpserver.NewServer(add.Default)
 	for _, tt := range []struct {
-		name, expected string
+		name, expected, ctype string
 		res *httptest.ResponseRecorder
 		req *http.Request
 	}{
@@ -60,11 +62,6 @@ func TestAdd_Handler(t *testing.T) {
 			res: httptest.NewRecorder(),
 			req: httptest.NewRequest(http.MethodPost, "/math?num=4&num=5&num=32", nil),
 			expected: "Total: 41",
-		},{
-			name: "The math handler shows the addition of the numbers in the query",
-			res: httptest.NewRecorder(),
-			req: httptest.NewRequest(http.MethodPost, "/math", strings.NewReader("num=4&num=5&num=32")),
-			expected: "Total: 41",
 		},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
@@ -72,7 +69,40 @@ func TestAdd_Handler(t *testing.T) {
 			srv.Handler.ServeHTTP(tt.res, tt.req)
 			is.Equal(tt.res.Code, http.StatusOK)
 			is.Equal(tt.res.Body.String(), tt.expected)
-
 		})
 	}
  }
+
+func TestAdd(t *testing.T) {
+	is := is.New(t)
+	srv := httpserver.NewServer(add.Default)
+	m := map[string][]string{}
+	m["num"] = []string{"4", "5", "32"}
+	jsonifym, _ := json.Marshal(m)
+
+	req := httptest.NewRequest(http.MethodPost, "/math", bytes.NewReader(jsonifym))
+	req.Header.Set("Content-Type", "application/json")
+	resp:= httptest.NewRecorder()
+
+
+	srv.Handler.ServeHTTP(resp, req)
+	is.Equal(resp.Code, http.StatusOK)
+	is.Equal(resp.Body.String(), "Total: 41")
+
+}
+
+func TestAdd_URLencoded(t *testing.T) {
+	is := is.New(t)
+	srv := httpserver.NewServer(add.Default)
+
+	req := httptest.NewRequest(http.MethodPost, "/math", strings.NewReader("num=4&num=5&num=32"))
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	resp:= httptest.NewRecorder()
+
+
+	srv.Handler.ServeHTTP(resp, req)
+	is.Equal(resp.Code, http.StatusOK)
+	is.Equal(resp.Body.String(), "Total: 41")
+
+}
+

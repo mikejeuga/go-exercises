@@ -1,11 +1,12 @@
 package httpserver
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
 	add "github.com/mikejeuga/go-exercises/src/domain"
-	"io"
 	"github.com/mikejeuga/go-exercises/utils"
+	"io"
 	"net/http"
 	"net/url"
 )
@@ -36,11 +37,21 @@ type AdderFuncServer func(num...int) int
 
 
 func (f AdderFuncServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+
 	bytes, err := io.ReadAll(r.Body)
 	if err != nil {
 		panic(err)
 	}
 	defer r.Body.Close()
+
+
+if r.Header.Get("Content-Type") == "application/json"{
+	var m map[string][]string
+	err = json.Unmarshal(bytes, &m)
+	total := f(utils.StringsToInts(m["num"])...)
+	fmt.Fprintf(w, "Total: %d", total)
+	return
+}
 
 	if len(bytes) == 0 {
 		strings := r.URL.Query()["num"]
