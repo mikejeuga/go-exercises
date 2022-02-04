@@ -8,6 +8,7 @@ import (
 	add "github.com/mikejeuga/go-exercises/src/domain"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"strings"
 	"testing"
 )
@@ -95,7 +96,12 @@ func TestAdd_URLencoded(t *testing.T) {
 	is := is.New(t)
 	srv := httpserver.NewServer(add.Default)
 
-	req := httptest.NewRequest(http.MethodPost, "/math", strings.NewReader("num=4&num=5&num=32"))
+	form := url.Values{}
+	form.Add("num", "4")
+	form.Add("num", "5")
+	form.Add("num", "32")
+
+	req := httptest.NewRequest(http.MethodPost, "/math", strings.NewReader(form.Encode()))
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	resp:= httptest.NewRecorder()
 
