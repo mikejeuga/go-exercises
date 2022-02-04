@@ -67,14 +67,17 @@ func (f AdderFuncServer) formEncodeMath(w http.ResponseWriter, strings []string)
 	total := f(utils.StringsToInts(strings)...)
 	fmt.Fprintf(w, "Total: %d", total)
 }
+type MathPayload struct {
+	Numbers []string `json:"nums"`
+}
 
 func (f AdderFuncServer) jsonMath(w http.ResponseWriter, bytes []byte) {
-	var m map[string][]string
+	var m MathPayload
 	err := json.Unmarshal(bytes, &m)
 	if err != nil {
 		panic(err)
 	}
-	total := f(utils.StringsToInts(m["nums"])...)
+	total := f(utils.StringsToInts(m.Numbers)...)
 	fmt.Fprintf(w, "Total: %d", total)
 }
 

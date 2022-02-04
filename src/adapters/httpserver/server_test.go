@@ -77,9 +77,9 @@ func TestAdd_Handler(t *testing.T) {
 func TestAdd(t *testing.T) {
 	is := is.New(t)
 	srv := httpserver.NewServer(add.Default)
-	m := map[string][]string{}
-	m["nums"] = []string{"4", "5", "32"}
-	jsonifym, _ := json.Marshal(m)
+
+
+	jsonifym, _ := json.Marshal(httpserver.MathPayload{Numbers: []string{"4", "5", "32"}})
 
 	req := httptest.NewRequest(http.MethodPost, "/math", bytes.NewReader(jsonifym))
 	req.Header.Set("Content-Type", "application/json")
